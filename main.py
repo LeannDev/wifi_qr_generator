@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Wifi credentials
 ssid = "WIFI_NAME"
 security_protocol = "WPA;WPA2"
-password = "WIFI_PASS"
+password = "WIFI_PASSWORD"
 
 # Text
 text1 = "WIFI NETWORK"
@@ -73,7 +73,9 @@ a4_height = 3508
 img_a4 = Image.new("RGB", (a4_width, a4_height), color=(255, 255, 255))
 
 # Insert the QR code in the center
-img_a4.paste(img_qr, (img_a4.size[0] // 2 - img_qr.size[0] // 2, img_a4.size[1] // 6 - img_qr.size[1] // 6))
+qr_x = (img_a4.size[0] - img_qr.size[0]) // 2
+qr_y = (img_a4.size[1] - img_qr.size[1]) // 6
+img_a4.paste(img_qr, (qr_x, qr_y))
 
 # add text
 font = ImageFont.truetype(os.path.join(BASE_DIR, "qr/fonts/Audiowide-Regular.ttf"), 200)
@@ -88,18 +90,13 @@ text1_width, text1_height = draw.textsize(text1, font)
 text2_width, text2_height = draw.textsize(text2, font)
 credentials_width, credentials_height = draw.textsize(credentials, credentials_font)
 
-x1 = (a4_width - text1_width) // 2
-y1 = (a4_height - text1_height) // 2
+# text coordinates
+x = img_a4.size[0] // 2 # center x
+y = qr_y + img_qr.size[1] + 50
 
-x2 = (a4_width - text2_width) // 2
-y2 = (a4_height - text2_height) // 2
-
-x_credentials = (a4_width - credentials_width) // 2
-y_credentials = (a4_height - credentials_height) // 2
-
-draw.text((x1, 100), text1, fill=(0, 0, 0), font=font)
-draw.text((x2, 2100), text2, fill=(0, 0, 0), font=font)
-draw.text((x_credentials, 1990), credentials, fill=(0, 0, 0), font=credentials_font)
+draw.text((x, 100), text1, fill=(0, 0, 0), font=font, anchor="ma")
+draw.text(((x, y)), text2, fill=(0, 0, 0), font=font, anchor="ma")
+draw.text((x, y), credentials, fill=(0, 0, 0), font=credentials_font, anchor="md")
 draw.text((50, 3220), footer, fill=(0, 0, 0), font=footer_font, anchor="ld")
 
 # date bar code
